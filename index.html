@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account - Miva Campus Event</title>
+  <style>
+    :root {
+      --bg-color: #f4f7f9;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --primary: #0f766e;
+      --primary-hover: #115e59;
+      --border-default: #d1d5db;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: 440px;
+      margin: auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e5e7eb;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.95rem;
+      border: 1.5px solid var(--border-default);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Validation States */
+    .form-group.invalid input {
+      border-color: var(--error);
+      background-color: var(--error-bg);
+    }
+
+    .form-group.valid input {
+      border-color: var(--success);
+      background-color: var(--success-bg);
+    }
+
+    .feedback {
+      font-size: 0.8rem;
+      margin-top: 0.35rem;
+      min-height: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .form-group.invalid .feedback {
+      color: var(--error);
+    }
+
+    .form-group.valid .feedback {
+      color: var(--success);
+    }
+
+    .typo-suggestion {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 0;
+    }
+
+    .password-rules {
+      list-style: none;
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.25rem;
+    }
+
+    .password-rules li.met {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      background-color: var(--primary);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s, opacity 0.2s;
+    }
+
+    button[type="submit"]:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    button[type="submit"]:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #statusBanner {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background-color: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success);
+      font-size: 0.875rem;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <div class="card">
+      <header>
+        <h1>Create an Account</h1>
+        <p>Miva Campus Event Signup Form</p>
+      </header>
+
+      <form id="registerForm" novalidate>
+        <!-- Full Name -->
+        <div class="form-group" id="group-fullname">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" placeholder="e.g. Chinedu Okafor" autocomplete="name" />
+          <div class="feedback" id="feedback-fullname"></div>
+        </div>
+
+        <!-- Email with Domain Typo Catcher -->
+        <div class="form-group" id="group-email">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="e.g. chinedu@gmail.com" autocomplete="email" />
+          <div class="feedback" id="feedback-email"></div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group" id="group-phone">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 08012345678 or +2348012345678" autocomplete="tel" />
+          <div class="feedback" id="feedback-phone"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group" id="group-password">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Create a strong password" autocomplete="new-password" />
+          <ul class="password-rules" id="password-rules">
+            <li id="rule-length">✗ 8+ characters</li>
+            <li id="rule-upper">✗ 1 uppercase letter</li>
+            <li id="rule-number">✗ 1 number</li>
+            <li id="rule-special">✗ 1 symbol (!@#$...)</li>
+          </ul>
+          <div class="feedback" id="feedback-password"></div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group" id="group-confirm">
+          <label for="confirm">Confirm Password</label>
+          <input type="password" id="confirm" name="confirm" placeholder="Re-enter your password" autocomplete="new-password" />
+          <div class="feedback" id="feedback-confirm"></div>
+        </div>
+
+        <button type="submit" id="submitBtn" disabled>Register</button>
+        <div id="statusBanner"></div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    @ 2026 Taiwo Wunderkind Enijuni
+  </footer>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusBanner = document.getElementById("statusBanner");
+
+    const fields = {
+      fullname: document.getElementById("fullname"),
+      email: document.getElementById("email"),
+      phone: document.getElementById("phone"),
+      password: document.getElementById("password"),
+      confirm: document.getElementById("confirm"),
+    };
+
+    // Common email domain typos map
+    const commonDomainTypos = {
+      "gmial.com": "gmail.com",
+      "gmal.com": "gmail.com",
+      "gamil.com": "gmail.com",
+      "gmail.co": "gmail.com",
+      "gmail.con": "gmail.com",
+      "yaho.com": "yahoo.com",
+      "yahooo.com": "yahoo.com",
+      "yahoo.con": "yahoo.com",
+      "hotmal.com": "hotmail.com",
+      "hotmial.com": "hotmail.com",
+      "outlok.com": "outlook.com",
+      "outllok.com": "outlook.com",
+    };
+
+    const state = {
+      fullname: false,
+      email: false,
+      phone: false,
+      password: false,
+      confirm: false,
+    };
+
+    function setFieldState(name, isValid, messageHtml) {
+      const group = document.getElementById(`group-${name}`);
+      const feedback = document.getElementById(`feedback-${name}`);
+      state[name] = isValid;
+
+      group.classList.remove("valid", "invalid");
+      if (isValid) {
+        group.classList.add("valid");
+        feedback.innerHTML = messageHtml || "✓ Looks good";
+      } else {
+        group.classList.add("invalid");
+        feedback.innerHTML = messageHtml || "";
+      }
+
+      updateSubmitButton();
+    }
+
+    function updateSubmitButton() {
+      const allValid = Object.values(state).every(Boolean);
+      submitBtn.disabled = !allValid;
+    }
+
+    // 1. Validate Full Name
+    function validateFullname() {
+      const val = fields.fullname.value.trim();
+      if (!val) {
+        setFieldState("fullname", false, "Full name is required.");
+      } else if (/\d/.test(val)) {
+        setFieldState("fullname", false, "Name shouldn't contain numbers.");
+      } else if (val.split(/\s+/).length < 2) {
+        setFieldState("fullname", false, "Please enter both first and last name.");
+      } else {
+        setFieldState("fullname", true, "✓ Valid full name");
+      }
+    }
+
+    // 2. Validate Email + Catch Domain Typos
+    function validateEmail() {
+      const val = fields.email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+      if (!val) {
+        setFieldState("email", false, "Email address is required.");
+        return;
+      }
+
+      if (!emailRegex.test(val)) {
+        setFieldState("email", false, "Enter a valid email (e.g., name@domain.com).");
+        return;
+      }
+
+      const [localPart, domain] = val.toLowerCase().split("@");
+      if (commonDomainTypos[domain]) {
+        const suggested = `${localPart}@${commonDomainTypos[domain]}`;
+        setFieldState(
+          "email",
+          false,
+          `Did you mean <button type="button" class="typo-suggestion" onclick="applyEmailFix('${suggested}')">${suggested}</button>?`
+        );
+        return;
+      }
+
+      setFieldState("email", true, "✓ Email looks right");
+    }
+
+    window.applyEmailFix = function (correctedEmail) {
+      fields.email.value = correctedEmail;
+      validateEmail();
+    };
+
+    // 3. Validate Phone Number
+    function validatePhone() {
+      const raw = fields.phone.value.trim();
+      const cleaned = raw.replace(/[\s\-()]/g, "");
+
+      if (!cleaned) {
